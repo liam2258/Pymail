@@ -38,6 +38,7 @@ def send_email():
         if not (name and given_email and subject and message):
             return jsonify({"error": "Incomplete JSON data"}), 400
         
+        # Attempt to connect to the database and log requester info
         try:
             # Connect to the database using the connection string
             connection = psycopg.connect(connection_string)
@@ -50,6 +51,7 @@ def send_email():
             cursor.close()
             connection.close()
 
+        # If inserting into the database fails return an error
         except Exception as error:
             return f"An error occurred: {str(error)}"
 
@@ -77,6 +79,7 @@ def send_email():
 
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
-    httpd = make_server('', 8000, app)
-    print("Serving on port 8000...")
+    port = os.getenv("PORT", 8000)
+    httpd = make_server('', int(port), app)
+    print(f"Serving on port {port}...")
     httpd.serve_forever()
