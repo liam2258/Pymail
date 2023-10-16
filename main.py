@@ -3,11 +3,13 @@ from dotenv import load_dotenv
 import smtplib, os, psycopg
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from flask_cors import CORS
 
 # Load environment variables from the .env file
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 # Configure email
 sender_email = os.getenv("SENDER_EMAIL")
